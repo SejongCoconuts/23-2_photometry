@@ -12,9 +12,9 @@ df = pd.read_csv(path_lc)[['Julian Date', 'Photon Flux [0.1-100 GeV](photons cm-
 # Remove spaces and operation symbols in data
 
 df = df[df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'].str.strip() != '']
-data_list = [x for x in df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'] if "<" in x]
-cleaned_data_list = [item.replace("<", "").strip() for item in data_list]
-float_list = [float(item) for item in cleaned_data_list]
+df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'] = df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'].str.replace('>', '').str.replace('<', '')
+df.to_csv('test.csv', index=False)
+
 
 def remove_below(threshold, data):
     thre = threshold*max(data[1])
