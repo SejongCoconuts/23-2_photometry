@@ -1,3 +1,6 @@
+import numpy as np
+from scipy.interpolate import CubicSpline
+from scipy.interpolate import Rbf
 
 def remove_below(threshold, data):
     thre = threshold*max(data[1])
