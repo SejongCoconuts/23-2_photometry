@@ -3,8 +3,7 @@ import os
 import numpy as np
 import pandas as pd
 
-from tasks import *
-
+from tasks import * 
 
 # EDIT HERE ==========================================================
 wdir = ''
@@ -12,6 +11,16 @@ wdir = ''
 delt = 14
 # ====================================================================
 
+path_lc_ori = wdir + 'lightcurve.dat'
+path_lc_pow = wdir + 'lightcurve_power.dat'
+path_lc_bpo = wdir + 'lightcurve_broken_power.dat'
+path_lc_spo = wdir + 'lightcurve_smoothed_power.dat'
+
+
+os.system('python2 method_simLC.py {} {} {}'.format(path_csv, path_lc_ori, args_bpo))
+os.system('python2 method_simLC.py {} {} {}'.format(path_csv, path_lc_pow, args_bpo))
+os.system('python2 method_simLC.py {} {} {}'.format(path_csv, path_lc_bpo, args_bpo))
+os.system('python2 method_simLC.py {} {} {}'.format(path_csv, path_lc_spo, args_bpo))
 
 
 f0 = pd.read_csv(wdir+'lightcurve.dat',                delim_whitespace=True, header=None)
