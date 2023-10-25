@@ -17,6 +17,7 @@ def simLC():
     # File Route
 
     path_datafile = sys.argv[1]
+    path_output   = sys.argv[2]
     
     
     org_time, org_flux = np.genfromtxt(path_datafile, usecols=(0,1), unpack=True)
