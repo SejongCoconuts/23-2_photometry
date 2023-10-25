@@ -1,4 +1,20 @@
+import os
+import numpy as np
+import pandas as pd
+from scipy.interpolate import CubicSpline
+from scipy.interpolate import Rbf
 
+# Load data
+
+path_lc = input('Data File Name:')
+df = pd.read_csv(path_lc)[['Julian Date', 'Photon Flux [0.1-100 GeV](photons cm-2 s-1)', 'Photon Flux Error(photons cm-2 s-1)']]
+
+# Remove spaces and operation symbols in data
+
+df = df[df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'].str.strip() != '']
+data_list = [x for x in df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'] if "<" in x]
+cleaned_data_list = [item.replace("<", "").strip() for item in data_list]
+float_list = [float(item) for item in cleaned_data_list]
 
 def remove_below(threshold, data):
     thre = threshold*max(data[1])
