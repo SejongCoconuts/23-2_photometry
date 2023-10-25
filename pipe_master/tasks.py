@@ -21,7 +21,7 @@ def PSD(delt, time, flux):
 
 def interpolation(x, y, Type):
     import numpy as np
-    from scipy.interpolate import Rbf, CubicSpline, cs
+    from scipy.interpolate import Rbf, CubicSpline
   
     if (Type == 'linear'):
         xnew = np.linspace(min(x), max(x), 1000)
