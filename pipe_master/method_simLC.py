@@ -1,11 +1,12 @@
+from DELCgen import *
 
-def simLC():
+def simLC(path_datafile, path_output, mode='original'):
 
     # python2 version of simulating LC
     # in case Jeff's workaround for py3 doesn't work
 
-  
-    from DELCgen import *
+    # mode = original, simplePL, brokenPL, curvedPL
+    
     import scipy.stats as st
     import numpy as np
     from astropy.modeling import models, fitting
@@ -17,11 +18,11 @@ def simLC():
     
     # File Route
 
-    path_datafile = sys.argv[1]
-    path_output   = sys.argv[2]
+
     
     
-    org_time, org_flux = np.genfromtxt(path_datafile, usecols=(0,1), unpack=True)
+    # org_time, org_flux = np.genfromtxt(path_datafile, usecols=(0,1), unpack=True)
+    
     
     
     # Bending power law params
@@ -37,32 +38,56 @@ def simLC():
     # load data lightcurve
     datalc = Load_Lightcurve(path_datafile,tbin)
     
-    def Fix_BL(v,A,v_bend,a_high,c):
-        p = BendingPL(v,A,v_bend,1.1,a_high,c)
-        return p
     
-    datalc.Fit_PSD(initial_params=[1,0.001,2.5,0],model=Fix_BL)
+    
+    
     
     # create mixture distribution to fit to PDF
     mix_model = Mixture_Dist([st.gamma,st.lognorm],[3,3],[[[2],[0]],[[2],[0],]])
     
     
     # estimate underlying variance of data light curve
-    datalc.STD_Estimate()
     
-    # simulate artificial light curve with Timmer & Koenig method
-    tklc = Simulate_TK_Lightcurve(BendingPL, (A,v_bend,a_low,a_high,c),lightcurve=datalc,
-                                    RedNoiseL=RedNoiseL,aliasTbin=aliasTbin)
     
-    # simulate artificial light curve with Emmanoulopoulos method, scipy distribution
-    delc_mod = Simulate_DE_Lightcurve(BendingPL, (A,v_bend,a_low,a_high,c),
-                                   mix_model, (kappa, theta, lnsig, np.exp(lnmu),
-                                                                  weight,1-weight),lightcurve=datalc)
     
-    # simulate artificial light curve with Emmanoulopoulos method, using the PSD
-    # and PDF of the data light curve, with default parameters (bending power law
-    # for PSD and mixture distribution of gamma and lognormal distribution for PDF)
-    delc = datalc.Simulate_DE_Lightcurve()
+    if(mode=='original'):
+        delc = datalc.Simulate_DE_Lightcurve()
+    
+    else:
+        
+        if(mode=='simplePL'):
+            initials = [1,1]
+            def model(v, alpha1, b1):
+                return 10**(np.log10(v)*alpha1 + np.log10(b1))
+                
+        if(mode=='brokenPL'):
+            initials = [1,1,1,1]
+            def model(v,A,v_bend,a_high,c):
+                p = BendingPL(v,A,v_bend,1.1,a_high,c)
+                return p
+            
+        if(mode=='curvedPL'):
+            initials = [1,1,1]
+            def model(v, alpha1, alpha2, b1):
+                return 10**(alpha1*np.log10(v)**2 + alpha2*np.log10(v) + np.log10(b1))
+        
+        datalc.Fit_PSD(initial_params=initials,model=model)
+        datalc.STD_Estimate()
+        # delc = Simulate_DE_Lightcurve(model,lightcurve=datalc)
+        
+        delc = datalc.Simulate_DE_Lightcurve()
     
     # save the simulated light curve as a txt file
     delc.Save_Lightcurve(path_output)
+
+
+
+import sys
+
+path_datafile = sys.argv[1]
+path_output   = sys.argv[2]
+mode = sys.argv[3]
+
+print(path_datafile)
+
+simLC(path_datafile, path_output, mode)
