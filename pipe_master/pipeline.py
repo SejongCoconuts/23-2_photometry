@@ -4,6 +4,7 @@ import pandas as pd
 
 from tasks import * 
 import matplotlib.pyplot as plt
+import readline
 
 # EDIT HERE ==========================================================
 delt = 14
