@@ -3,6 +3,14 @@ import numpy as np
 import pandas as pd
 from scipy.interpolate import CubicSpline
 from scipy.interpolate import Rbf
+import readline
+
+# Read line 
+
+readline.parse_and_bind("tab: complete")
+def path_completer(text, state):
+    return [x for x in os.listdir('.') if x.startswith(text)][state]
+readline.set_completer(path_completer)
 
 # Load data
 
