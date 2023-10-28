@@ -5,25 +5,6 @@ from scipy.interpolate import CubicSpline
 from scipy.interpolate import Rbf
 import readline
 
-# Read line 
-
-readline.parse_and_bind("tab: complete")
-def path_completer(text, state):
-    return [x for x in os.listdir('.') if x.startswith(text)][state]
-readline.set_completer(path_completer)
-
-# Load data
-
-path_lc = input('Data File Name:')
-df = pd.read_csv(path_lc)[['Julian Date', 'Photon Flux [0.1-100 GeV](photons cm-2 s-1)', 'Photon Flux Error(photons cm-2 s-1)']]
-
-# Remove spaces and operation symbols in data
-
-df = df[df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'].str.strip() != '']
-df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'] = df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'].str.replace('>', '').str.replace('<', '')
-df.to_csv('test.csv', index=False)
-
-
 def remove_below(threshold, data):
     thre = threshold*max(data[1])
     cons = (data[1] > thre)
