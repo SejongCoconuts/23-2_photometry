@@ -6,3 +6,5 @@
 
 There seems to be some issue in fitting simplePL and curved PL on data.
 We tried to fix the problem but we failed to do so yet.
+
+The PL functions are in method_simLC.py and can be modified therein.
