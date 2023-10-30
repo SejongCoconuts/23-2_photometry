@@ -21,8 +21,8 @@ readline.set_completer(path_completer)
 
 # Load data
 
-path_lc = input('Data File Name:')
-df = pd.read_csv(path_lc)[['Julian Date', 'Photon Flux [0.1-100 GeV](photons cm-2 s-1)', 'Photon Flux Error(photons cm-2 s-1)']]
+path_csv = input('Data File Name:')
+df = pd.read_csv(path_csv)[['Julian Date', 'Photon Flux [0.1-100 GeV](photons cm-2 s-1)', 'Photon Flux Error(photons cm-2 s-1)']]
 
 # Remove spaces and operation symbols in data
 
