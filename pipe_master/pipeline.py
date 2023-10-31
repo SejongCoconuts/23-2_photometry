@@ -22,29 +22,23 @@ readline.set_completer(path_completer)
 # Load data
 
 path_csv = input('Data File Name:')
-df = pd.read_csv(path_csv)[['Julian Date', 'Photon Flux [0.1-100 GeV](photons cm-2 s-1)', 'Photon Flux Error(photons cm-2 s-1)']]
 
-# Remove spaces and operation symbols in data
-
-df = df[df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'].str.strip() != '']
-df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'] = df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'].str.replace('>', '').str.replace('<', '')
-df.to_csv('test.csv', index=False)
-
+if not path_csv.startswith('./'):
+    path_csv = './' + path_csv
 
 wdir = os.path.dirname(path_csv)+'/'
 os.chdir(wdir)
 
-# df = pd.read_csv(path_csv)[['Julian Date', 'Photon Flux [0.1-100 GeV](photons cm-2 s-1)', 'Photon Flux Error(photons cm-2 s-1)']]
 df = pd.read_csv(path_csv)[['Julian Date', 'Photon Flux [0.1-100 GeV](photons cm-2 s-1)', 'Photon Flux Error(photons cm-2 s-1)']]
 
 # Remove spaces and operation symbols in data
 
 df = df[df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'].str.strip() != '']
 df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'] = df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'].str.replace('>', '').str.replace('<', '')
-df.to_string(wdir+'test.csv', index=False)
 
-
-path_csv = wdir+'test.csv'
+df.to_csv('filtered.csv', index=False)
+df.to_string(wdir+'filtered.csv', index=False)
+path_csv = wdir+'filtered.csv'
 
 path_lc_ori = wdir + 'lightcurve.dat'
 path_lc_pow = wdir + 'lightcurve_power.dat'
