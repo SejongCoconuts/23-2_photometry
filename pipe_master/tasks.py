@@ -22,7 +22,7 @@ def PSD(delt, time, flux):
     time = time - time.values[0]
     dft_list = []
     for i in range(len(flux)):
-       dft = (np.sum(xbar*np.cos(2*np.pi*fj[i]*time)))**2 + \ (np.sum(xbar*np.sin(2*np.pi*fj[i]*time)))**2
+       dft = (np.sum(xbar*np.cos(2*np.pi*fj[i]*time)))**2 + (np.sum(xbar*np.sin(2*np.pi*fj[i]*time)))**2
        dft_list.append(dft)
     # dft = (np.sum(xbar*np.cos(2*np.pi*fj*time)))**2 + (np.sum(xbar*np.sin(2*np.pi*fj*time)))**2
     return fj[1:], dft_list[1:]
