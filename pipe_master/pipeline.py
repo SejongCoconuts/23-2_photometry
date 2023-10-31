@@ -58,7 +58,6 @@ f2 = pd.read_csv(wdir+'lightcurve_broken_power.dat',   delim_whitespace=True, he
 f3 = pd.read_csv(wdir+'lightcurve_smoothed_power.dat', delim_whitespace=True, header=1, names=[0,1])
 
 
-
 #PSD, original data ========================
 fj0, dft0 = PSD(delt, f0[0], f0[1])
 fj1, dft1 = PSD(delt, f1[0], f1[1])
