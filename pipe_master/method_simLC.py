@@ -81,7 +81,11 @@ def simLC(path_datafile, path_output, mode='original',paramsSPL=[1,-1],paramsBPL
         elif create_arbitrary == True:
             if(mode=='SimplePL'):
                 #delc = datalc.Simulate_DE_Lightcurve(model,(paramsSPL[0],paramsSPL[1]))
-                sim_output = EmmanLC(datalc.time, RedNoiseL,aliasTbin, tbin, PSDModel=model, PSDParams=paramsSPL, PDFModel=mix_model, PDFParams=datalc.PDFParams)
+                surrogate, PSDlast, shortLC, periodogram, fft = EmmanLC(datalc.time, RedNoiseL,aliasTbin, tbin, PSDModel=model, PSDParams=paramsSPL, 
+                                                                        PDFModel=mix_model, PDFParams=[datalc.pdfFit['x']])
+                ## surrogate[0] = simulated time, surrogate[1] = simulated flux
+                ## PSDLast[0] = simulated freq, PSDLast[1] = simulated power
+    
     
     # save the simulated light curve as a txt file
     delc.Save_Lightcurve(path_output)
