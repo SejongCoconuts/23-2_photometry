@@ -1,8 +1,7 @@
 from DELCgen import *
 
-## Test
 
-def simLC(path_datafile, path_output, mode='original'):
+def simLC(path_datafile, path_output, mode='original',paramsSPL=[1,-1],paramsBPL=[1,1,1,1],paramsCPL=[1,1,1]):
 
     # python2 version of simulating LC
     # in case Jeff's workaround for py3 doesn't work
@@ -74,10 +73,15 @@ def simLC(path_datafile, path_output, mode='original'):
                 return 10**(alpha1*np.log10(v)**2 + alpha2*np.log10(v) + np.log10(b1))
         
         datalc.Fit_PSD(initial_params=initials,model=model)
+        datalc.Fit_PDF(initial_params=[kappa,theta,lnmu,lnsig,weight],model=mix_model )
         datalc.STD_Estimate()
         # delc = Simulate_DE_Lightcurve(model,lightcurve=datalc)
-        
-        delc = datalc.Simulate_DE_Lightcurve()
+        if fit_original == True:
+            delc = datalc.Simulate_DE_Lightcurve()
+        elif create_arbitrary == True:
+            if(mode=='SimplePL'):
+                #delc = datalc.Simulate_DE_Lightcurve(model,(paramsSPL[0],paramsSPL[1]))
+                sim_output = EmmanLC(datalc.time, RedNoiseL,aliasTbin, tbin, PSDModel=model, PSDParams=paramsSPL, PDFModel=mix_model, PDFParams=datalc.PDFParams)
     
     # save the simulated light curve as a txt file
     delc.Save_Lightcurve(path_output)
