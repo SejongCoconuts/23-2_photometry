@@ -53,7 +53,7 @@ xint = np.linspace(x1_min, x1_max, len(x1))
 fl = interpolate.interp1d(x1, y1, kind='linear') #linear interpolation
 yintl = fl(xint)
 
-plt.subplot(2,1,1)
+plt.subplot(3,1,1)
 plt.title('Original LC')
 plt.xlabel('Julian Date')
 plt.ylabel('Photon Flux [0.1-100 GeV](photons cm-2 s-1)')
@@ -63,17 +63,24 @@ plt.grid()
 
 fq = interpolate.interp1d(x1, y1,kind ='quadratic') #spline interpolation
 yintq = fq(xint)
-plt.subplot(2,1,2)
+plt.subplot(3,1,2)
 plt.plot(xint,yintq, color = 'green', linewidth=1)
 plt.xlabel('Julian Date')
 plt.ylabel('Photon Flux [0.1-100 GeV](photons cm-2 s-1)')
 plt.legend(['Spline'])
 plt.grid()
 #plt.show()
-plt.savefig('Data_LC_interpolation.png')
+#plt.savefig('Data_LC_interpolation.png')
 
-
-
+fg = interpolate.Rbf(x1, y1, function ='gaussian')
+yintg = fg(xint)
+plt.subplot(3,1,3)
+plt.plot(xint,yintq, color = 'red', linewidth=1)
+plt.xlabel('Julian Date')
+plt.ylabel('Photon Flux [0.1-100 GeV](photons cm-2 s-1)')
+plt.legend(['Gaussian'])
+plt.grid()
+plt.show()
 
 
 dd = pd.DataFrame({'time':[xint], 'flux':[yintl]})
@@ -84,6 +91,10 @@ dd2 = pd.DataFrame({'time':[xint], 'flux':[yintq]})
 dd3 = dd2.apply(pd.Series.explode)
 dd3.to_csv("Mkn501_q1.txt",sep="\t", index = False) 
 
+dd4 = pd.DataFrame({'time':[xint], 'flux':[yintg]})
+dd5 = dd4.apply(pd.Series.explode)
+dd5.to_csv("Mkn501_g1.txt",sep="\t", index = False) 
+
 #simulation LC
 x2 = np.array(time2)
 y2 = np.array(flux2)
@@ -92,7 +103,7 @@ x2_max = np.max(x2)
 xint = np.linspace(x2_min, x2_max, len(x2))
 fl = interpolate.interp1d(x2, y2, kind='linear') #linear interpolation
 yintl = fl(xint)
-plt.subplot(2,1,1)
+plt.subplot(3,1,1)
 plt.title('Simulation_LC(removed data)')
 plt.plot(xint,yintl, color = 'blue', linewidth=1)
 plt.xlabel('Julian Date')
@@ -102,15 +113,25 @@ plt.grid()
 
 fq = interpolate.interp1d(x2, y2,kind ='quadratic') #spline interpolation
 yintq = fq(xint)
-plt.subplot(2,1,2)
+plt.subplot(3,1,2)
 plt.plot(xint,yintq, color = 'green', linewidth=1)
 plt.legend(['Spline'])
 plt.xlabel('Julian Date')
 plt.ylabel('Photon Flux [0.1-100 GeV](photons cm-2 s-1)')
 plt.grid()
 #plt.show()
-plt.savefig('Removed_data_LC_interpolation.png')
+#plt.savefig('Removed_data_LC_interpolation.png')
 
+
+fg = interpolate.Rbf(x2, y2, function ='gaussian')
+yintg = fg(xint)
+plt.subplot(3,1,3)
+plt.plot(xint,yintq, color = 'red', linewidth=1)
+plt.xlabel('Julian Date')
+plt.ylabel('Photon Flux [0.1-100 GeV](photons cm-2 s-1)')
+plt.legend(['Gaussian'])
+plt.grid()
+plt.show()
 
 
 
@@ -124,7 +145,12 @@ dd7 = dd6.apply(pd.Series.explode)
 dd7.to_csv("Mkn501_q2.txt",sep="\t", index = False) 
 
 
-# Guassian interpolation
+dd8 = pd.DataFrame({'time':[xint], 'flux':[yintg]})
+dd9 = dd8.apply(pd.Series.explode)
+dd9.to_csv("Mkn501_g1.txt",sep="\t", index = False) 
+
+
+
 
 
 
