@@ -1,9 +1,6 @@
 from DELCgen import *
 import matplotlib.pyplot as plt
 
-def SPL(v, alpha1, b1):
-    return 10**(np.log10(v)*alpha1 + np.log10(b1))
-
 
 def simLC(path_datafile, path_output, mode='original',paramsSPL=[1,-1],paramsBPL=[1,1,1,1],paramsCPL=[1,1,1],fit_original=False,create_arbitrary=True):
 
@@ -88,7 +85,7 @@ def simLC(path_datafile, path_output, mode='original',paramsSPL=[1,-1],paramsBPL
                 #delc = datalc.Simulate_DE_Lightcurve(model,(paramsSPL[0],paramsSPL[1]))
                 print(paramsSPL)
                 print(model)
-                surrogate, PSDlast, shortLC, periodogram, fft = EmmanLC(datalc.time, RedNoiseL,aliasTbin,RandomSeed, tbin, PSDmodel=SPL, PSDparams=paramsSPL,
+                surrogate, PSDlast, shortLC, periodogram, fft = EmmanLC(datalc.time, RedNoiseL,aliasTbin,RandomSeed, tbin, PSDmodel=model, PSDparams=paramsSPL,
                                                 PDFmodel=mix_model, PDFparams=[kappa,theta,lnmu,lnsig,weight])
                 ## surrogate[0] = simulated time, surrogate[1] = simulated flux
                 ## PSDLast[0] = simulated freq, PSDLast[1] = simulated power
