@@ -34,7 +34,7 @@ def simLC(path_datafile, path_output, mode='original',paramsSPL=[1,-1],paramsBPL
     A,v_bend,a_low,a_high,c = 0.03, 2.3e-4, 1.1, 2.2, 0.009
 
     # Probability density function params
-    kappa,theta,lnmu,lnsig,weight = 5.67, 5.96, 2.14, 0.31,0.82
+    kappa,theta,lnmu,lnsig,weight = 1.67, 1.96, 1.14, 0.31,0.12
     # Simulation pa
     RedNoiseL,aliasTbin, RandomSeed, tbin = 100,1,6501,7
 
@@ -77,7 +77,7 @@ def simLC(path_datafile, path_output, mode='original',paramsSPL=[1,-1],paramsBPL
                 return 10**(alpha1*np.log10(v)**2 + alpha2*np.log10(v) + np.log10(b1))
 
         # datalc.Fit_PSD(initial_params=initials,model=model)
-        # datalc.Fit_PDF(initial_params=[kappa,theta,lnmu,lnsig,weight],model=mix_model )
+        datalc.Fit_PDF(initial_params=[kappa,theta,lnmu,lnsig,weight],model=mix_model )
         # datalc.STD_Estimate()
         # delc = Simulate_DE_Lightcurve(model,lightcurve=datalc)
         if fit_original == True:
@@ -94,9 +94,10 @@ def simLC(path_datafile, path_output, mode='original',paramsSPL=[1,-1],paramsBPL
                 ## PSDLast[0] = simulated freq, PSDLast[1] = simulated power
                 ax1 = plt.subplot(121)
                 ax2 = plt.subplot(122)
-                ax1.plot(surrogate[0],surrogate[1],label="Simulated LC")
+                ax1.plot(surrogate[0],surrogate[1],label="Simulated LC params:{0}".format(paramsSPL))
                 ax2.plot(np.log10(PSDlast[0]),np.log10(PSDlast[1]),label="Simulated PSD")
-                plt.show()
+                ax1.legend()
+
 
     # save the simulated light curve as a txt file
     # delc.Save_Lightcurve(path_output)
@@ -111,5 +112,11 @@ mode = "simplePL"
 
 print(path_datafile)
 
-simLC(path_datafile, path_output, mode, paramsSPL = [1,-5])
-simLC(path_datafile, path_output, mode, paramsSPL = [-5,-1])
+
+simLC(path_datafile, path_output, mode, paramsSPL = [1,1])
+simLC(path_datafile, path_output, mode, paramsSPL = [0,1])
+simLC(path_datafile, path_output, mode, paramsSPL = [-1,1])
+
+
+
+plt.show()
