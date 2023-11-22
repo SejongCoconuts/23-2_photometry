@@ -83,4 +83,8 @@ def interpolate(x, y, Type):
         return xnew, ynew   
 
 
+# Calc original data
+
+
+
 
