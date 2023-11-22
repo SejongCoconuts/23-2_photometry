@@ -29,7 +29,7 @@ def fit_PDF(flux):
 
 
 
-def PSD(delt, time, flux):
+def calc_PSD(delt, time, flux):
     fj = []
     for i in range(len(flux)):
         fj.append((i)/(len(flux)*delt))
@@ -42,10 +42,6 @@ def PSD(delt, time, flux):
         dft_list.append(dft)
     return fj[1:], dft_list[1:]
 
-
-
-def calc_PSD():
-  return PSD,freq
 
 def bin_PSD(time,flux,error,tbin,binning,model,init_params):
   # SPL
