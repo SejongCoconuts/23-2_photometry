@@ -34,7 +34,8 @@ df = pd.read_csv(path_csv)[['Julian Date', 'Photon Flux [0.1-100 GeV](photons cm
 # Remove spaces and operation symbols in data
 
 df = df[df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'].str.strip() != '']
-df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'] = df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'].str.replace('>', '').str.replace('<', '')
+mask = df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'].str.contains('<|>', regex=True)
+df = df[~mask]
 
 df.to_csv('filtered.csv', index=False)
 df.to_string(wdir+'filtered.csv', index=False)
