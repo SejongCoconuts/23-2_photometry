@@ -69,7 +69,21 @@ def calc_fit_sim(time,flux):
 def interpolate(type):
   return interp_time, interp_flux
 
-
+def interpolation(x, y, Type):
+    if (Type == 'linear'):
+        xnew = np.linspace(min(x), max(x), 1000)
+        ynew = np.interp(xnew, x, y)
+        return xnew, ynew
+    if (Type == 'spline'):
+        cs = CubicSpline(x, y)
+        xs = np.linspace(min(x), max(x), 1000)
+        ys = cs(xs)
+        return xs, ys
+    if (Type == 'gauss'):
+        rbfi = Rbf(x, y, function='gaussian')
+        xnew = np.linspace(min(x), max(x), 1000)
+        ynew = rbfi(xnew)
+        return xnew, ynew   
 
 
 
