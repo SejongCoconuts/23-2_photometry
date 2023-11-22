@@ -66,10 +66,7 @@ def calc_fit_sim(time,flux):
   params, param_err = bin_PSD(PSD,freq)
   return params,param_errs
 
-def interpolate(type):
-  return interp_time, interp_flux
-
-def interpolation(x, y, Type):
+def interpolate(x, y, Type):
     if (Type == 'linear'):
         xnew = np.linspace(min(x), max(x), 1000)
         ynew = np.interp(xnew, x, y)
