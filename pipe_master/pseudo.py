@@ -1,7 +1,28 @@
+import readline
+readline.parse_and_bind("tab: complete")
+def path_completer(text, state):
+  return [x for x in os.listdir('.') if x.startswith(text)][state]
+readline.set_completer(path_completer)
 
 def read_original_csv(file):
-  pd.read_csv()
-  return time,flux,error
+  
+  path_csv = input('Data File Name:')
+  
+  if not path_csv.startswith('./'):
+      path_csv = './' + path_csv\
+  wdir = os.path.dirname(path_csv)+'/'
+  os.chdir(wdir)
+  
+  df = pd.read_csv(path_csv)[['Julian Date', 'Photon Flux [0.1-100 GeV](photons cm-2 s-1)', 'Photon Flux Error(photons cm-2 s-1)']]
+  
+  # Remove spaces and operation symbols in data
+  
+  df = df[df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'].str.strip() != '']
+  mask = df['Photon Flux [0.1-100 GeV](photons cm-2 s-1)'].str.contains('<|>', regex=True)
+  df = df[~mask]
+  
+  df.to_csv('filtered.csv', index=False)
+  return df[0],df[1],df[2]
 
 def fit_PDF(flux):
  
