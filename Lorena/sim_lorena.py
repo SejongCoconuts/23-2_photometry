@@ -43,18 +43,17 @@ ax1.legend(loc = 'best')
 def lcs_sim(paramspsd, paramspdf, nn):
 
   
-    # create mixture distribution to fit to PDF
-    mix_model = Mixture_Dist([st.gamma, st.lognorm],[3,3],[[[2],[0]],[[2],[0],]])
+     # create mixture distribution to fit to PDF
+    #mix_model = Mixture_Dist([st.gamma, st.lognorm],[3,3],[[[2],[0]],[[2],[0],]])
     
-    datalc.Fit_PDF(initial_params=paramspdf,model= mix_model)
+    #datalc.Fit_PDF(initial_params=paramspdf,model= mix_model)
     
     #Simulate the lightcurve using the EmmanLC function:
     
    # surrogate, PSDlast, shortLC, periodogram, fft = EmmanLC(time = datalc.time, RedNoiseL =  RedNoiseL, aliasTbin = aliasTbin, tbin = tbin, PSDmodel=Bpower_law, PSDparams=paramspsd,
                                                 #PDFmodel=mix_model, PDFparams=(datalc.pdfFit['x'][0], datalc.pdfFit['x'][1], datalc.pdfFit['x'][3], np.exp(datalc.pdfFit['x'][2]), datalc.pdfFit['x'][4]))   
                 
-    delc_mod = Simulate_DE_Lightcurve(Bpower_law, paramspsd, mix_model, (datalc.pdfFit['x'][0], datalc.pdfFit['x'][1], datalc.pdfFit['x'][3], np.exp(datalc.pdfFit['x'][2]), datalc.pdfFit['x'][4]), lightcurve=datalc)
-
+    delc_mod = Simulate_DE_Lightcurve(Bpower_law, paramspsd, st.lognorm, paramspdf, lightcurve=datalc)
 
     
     ax1.plot(delc_mod.time, delc_mod.flux, 'k-o', zorder = 1)
