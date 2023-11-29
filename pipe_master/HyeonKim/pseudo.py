@@ -197,13 +197,13 @@ class Analysis_LC:
 
 
     def sim_LC(self,time=None,flux=None, PSD_params=None,PSD_model='SPL',PDFparams=None,PDFmodel='lognorm',best_fit=True):
+        time=self.time
+        flux=self.flux
+        tbin=self.tbin
         if best_fit:
             PSD_model=self.model
             PSD_params=self.fit_params
             PDFparams=[self.lnsig, self.loc, self.scale]
-            time=self.time
-            flux=self.flux
-            tbin=self.tbin
             PDFparams=[self.lnsig, self.loc, self.scale]
         else:
             if PSD_model=='SPL':
