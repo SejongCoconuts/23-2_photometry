@@ -10,6 +10,8 @@ import scipy.special as sp
 import matplotlib.pyplot as plt
 from scipy.interpolate import CubicSpline
 from scipy.interpolate import Rbf
+import dynesty
+
 
 class Analysis_LC:
     def __init__(self,path_csv):
@@ -108,6 +110,38 @@ class Analysis_LC:
 
         return f[1:], DFJ[1:]
 
+    def nested_sampler_fit():
+
+        def log_likelihood_spl(theta):
+            model = spl(theta, binned_freq)
+            obs = binned_power
+            yerr = binned_error
+            inv_sigma2 = 1.0 / (yerr**2 + model**2)
+            return -0.5 * (np.sum((obs-model)**2 * inv_sigma2 - np.log(inv_sigma2)))
+
+        def prior_transform_spl(utheta):
+            uamp, ualpha = utheta
+            amp = uamp*1e-7
+            alpha = -ualpha
+            return amp, alpha
+
+        dsampler = dynesty.DynamicNestedSampler(log_likelihood_spl, prior_transform_spl, ndim=2,\
+                                                bound='multi', sample='rwalk')
+        dsampler.run_nested()
+        dres = dsampler.results
+
+        fit_params = np.array([np.median(dres['samples'][:, 0:1]),  np.median(dres['samples'][:, 1:2])])
+        #estimated = dres['samples'][dres['logl'].argmax()]
+        #fit_params = np.array([estimated[0], estimated[1]])
+
+
+        fit_modelx = np.linspace(min(binned_freq), max(binned_freq), 100)
+        fit_modely = spl(fit_params, fit_modelx)
+
+        chi = abs(chisquare(f_obs=np.log10(binned_power), f_exp=np.log10(spl(fit_params, binned_freq)))[0])
+        fit_params_err = np.array([np.std(dres['samples'][:, 0:1]), np.std(dres['samples'][:, 1:2])])
+
+
 
     def fit_PSD(self,delt,binning,time=None,flux=None,model='SPL',paramsSPL=[-1,1],paramsBPL=[-1,-1,1,1],paramsCPL=[-1,1,1],origin_data=True):
         if origin_data:
@@ -184,7 +218,7 @@ class Analysis_LC:
             self.fit_param_errors=fit_param_errors
             self.chi_sq=chi_sq
 
-        return fit_params,fit_param_errors,chi_sq
+        return fit_params,fit_param_errors,chi_sq,PSDmean,PSDerror,fmean,ferror
 
     def plot_PSD(self):
         plt.plot(self.f,self.DFJ, zorder=1)
